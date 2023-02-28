@@ -8,8 +8,9 @@ import {
   REGISTER,
 } from 'redux-persist';
 import { configureStore } from "@reduxjs/toolkit";
-import { persistedContactsReducer, } from "./contactsSlice";
+import { persistedContactsReducer } from "./contactsSlice";
 import { filterReducer } from "./filterSlice";
+
 
 
 

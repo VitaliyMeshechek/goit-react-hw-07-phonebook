@@ -1,12 +1,13 @@
 import { useForm } from "react-hook-form";
+import { toast } from 'react-toastify';
 
 import { useSelector, useDispatch } from "react-redux";
-import { addContact } from "redux/contactsSlice";
-import { getContacts } from "redux/selectors";
+import { addContact } from "redux/operations";
+import { selectContacts } from "redux/selectors";
 import { Form, Label, Input, Button } from './ContactForm.styled';
 
 export const ContactForm = () => {
-  const contacts = useSelector(getContacts);
+  const contacts = useSelector(selectContacts);
   const dispatch = useDispatch();
   const {
     register,
@@ -17,7 +18,7 @@ export const ContactForm = () => {
     reset } = useForm({
       defaultValues: {
       name: '',
-      number: '',
+      phone: '',
   },
   mode: "onBlur",
 });
@@ -27,16 +28,16 @@ export const ContactForm = () => {
   const onSubmit = (event) => {
     for (const contact of contacts) {
       if (contact.name.toLowerCase() === event.name.toLowerCase()) {
-        alert(`The entered ${event.name} already exists in contacts! Please enter another name!`);
-        return;
+        toast.error(`The entered ${event.name} already exists in contacts! Please enter another name!`);
+       return;
       };
-      if (contact.number === event.number) {
-        alert(`The entered ${event.number} already exists in contacts! Please enter another number!`);
-        return;
-      };
-    }
 
-      dispatch(addContact(event.name, event.number));
+      if (contact.phone === event.phone) {
+        toast.error(`The entered ${event.phone} already exists in contacts! Please enter another number!`);
+       return;
+      };
+  }
+    dispatch(addContact(event));
 
       reset();
   }
@@ -57,13 +58,13 @@ export const ContactForm = () => {
       <Label>
         Number
         <Input
-          {...register("number")}
+          {...register("phone")}
           placeholder="283-34-54"
           pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
           title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
           required
         />
-        {errors.number && <p>Fields must be filled!</p>}
+        {errors.phone && <p>Fields must be filled!</p>}
       </Label>
 
       <Button type="submit">Add contact</Button>

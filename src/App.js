@@ -1,27 +1,42 @@
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import { ContactForm } from './components/ContactForm/ContactForm';
 import { Filter } from './components/Filter/Filter';
 import { ContactList } from './components/ContactList/ContactList';
-import { useSelector } from 'react-redux';
-import { getContacts } from 'redux/selectors';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectContacts, selectIsLoading, selectError } from 'redux/selectors';
+import { useEffect } from 'react';
+import { fetchContacts } from 'redux/operations';
+import { Container, Title, Paragraph } from 'App.styled';
 
 
 
 export const App = () => {
-  const contacts = useSelector(getContacts);
+  const contacts = useSelector(selectContacts);
+  const isLoading = useSelector(selectIsLoading);
+  const error = useSelector(selectError);
+  const dispatch = useDispatch();
   const contactsLength = contacts.length;
 
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
+
    return (
-     <div>
-       <h1 title="Phonebook">Phonebook</h1>
+     <Container>
+       <Title title="Phonebook">Phonebook</Title>
        <ContactForm />
-       <h2 title="Contact">Contact</h2>
+       <Title title="Contact">Contact</Title>
        <Filter />
+       {isLoading && !error && <b>Request in progress...</b>}
        {contactsLength > 0 ? (
         <ContactList />
       ) : (
-        <p>Currently your phonebook has no contacts. Please add them.</p>
+        <Paragraph>Currently your phonebook has no contacts. Please add them.</Paragraph>
       )}
-     </div>
+      <ToastContainer position="top-center" autoClose={3000} theme="colored" />
+     </Container>
    );
 }
 

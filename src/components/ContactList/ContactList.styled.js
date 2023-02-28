@@ -11,7 +11,7 @@ width: 550px;
 
 export const Item = styled.li
 `display: flex;
-justify-content: center;
+justify-content: space-between;
 align-items: center;
 width: 100%;
 padding: 12px;

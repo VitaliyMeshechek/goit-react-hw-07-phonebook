@@ -47,5 +47,12 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "json.schemas": [
+    {
+      "fileMatch": ["/package.json"],
+      "url": "https://json.schemastore.org/package",
+      "schema": true
+    }
+  ]
 }
